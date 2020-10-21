@@ -37,7 +37,7 @@ public class movedplayer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        //GetComponent<Animator>().SetBool("isWalking", true); 
     }
 
     // Update is called once per frame
@@ -49,6 +49,7 @@ public class movedplayer : MonoBehaviour
         {
             myRigidBody.AddForce(direction * speed);
         }
-        
+        var isWalking = direction.x > 0;
+        GetComponent<Animator>().SetBool("isWalking", isWalking);
     }
 }
