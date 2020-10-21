@@ -15,6 +15,11 @@ public class movedplayer : MonoBehaviour
 
     private Inputs inputs;
     private Vector2 direction;
+   
+    private Rigidbody2D myRigidbody;
+    private Animator myAnimator;
+    private SpriteRenderer myRenderer;
+
 
     private void OnEnable() 
     {
@@ -22,6 +27,10 @@ public class movedplayer : MonoBehaviour
         inputs.Enable();
         inputs.Player.Move.performed += OnMovedPerformed;
         inputs.Player.Move.canceled += OnMoveCanceled;
+        myRigidbody = GetComponent<Rigidbody2D>();
+        myAnimator = GetComponent<Animator>();
+        myRenderer = GetComponent<SpriteRenderer>();
+
     }
 
     private void OnMoveCanceled(InputAction.CallbackContext obj)
@@ -43,13 +52,20 @@ public class movedplayer : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        var myRigidBody = GetComponent<Rigidbody2D>();
         direction.y = 0;
-        if (myRigidBody.velocity.sqrMagnitude < maxSpeed)
+        if (myRigidbody.velocity.sqrMagnitude < maxSpeed)
         {
-            myRigidBody.AddForce(direction * speed);
+            myRigidbody.AddForce(direction * speed);
         }
-        var isWalking = direction.x > 0;
-        GetComponent<Animator>().SetBool("isWalking", isWalking);
+        var isWalking = direction.x != 0;
+        myAnimator.SetBool("isWalking", isWalking);
+        if (direction.x < 0)
+        {
+            myRenderer.flipX = true;
+        }
+        else if (direction.x > 0)
+        {
+            myRenderer.flipX = false;
+        }
     }
 }
